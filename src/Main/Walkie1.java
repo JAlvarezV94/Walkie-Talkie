@@ -1,9 +1,9 @@
 package Main;
 
-import java.net.InetAddress;
 import java.net.SocketException;
 
 import HelpperPackage.UI;
+import HelpperPackage.Validations;
 import NETHelpper.NETConnection;
 
 public class Walkie1 {
@@ -13,11 +13,15 @@ public class Walkie1 {
 		byte option = 0;
 		int port = 0;
 		boolean exit = false;
+		boolean stopCommunication = false;
 		String message = null;
-		InetAddress host = null;
+		String ip = null;
+		
 		
 		port = UI.chooseChannel();
-
+		ip = UI.chooseIp();
+		
+		
 		do{
 			UI.printMenu();
 			option = UI.chooseOption();
@@ -25,14 +29,18 @@ public class Walkie1 {
 			switch(option){
 			case 1:
 				message = UI.writeMessage();
-				NETConnection.sentMessage(host, message, port);
+				NETConnection.sentMessage(ip, message, port);
 				break;
 			case 2:
-				try {
-					message = NETConnection.reciveMessage(port);
-				} catch (SocketException e) {
-				}
-				UI.showMessage(message);
+				do{
+					try {
+						message = NETConnection.reciveMessage(port);
+					} catch (SocketException e) {
+					}
+					UI.showMessage(message);
+					stopCommunication = Validations.stopCommunication(message);					
+				}while(!stopCommunication);
+				
 				break;
 			case 3:
 				exit = true;
