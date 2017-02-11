@@ -53,6 +53,7 @@ public class UI {
 		
 		do{
 			System.out.print("Establecer la IP: ");
+			ip = entry.nextLine();
 			validated = Validations.validateIp(ip);
 		}while(!validated);
 		
